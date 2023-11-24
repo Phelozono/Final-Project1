@@ -1,25 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import Fuse from 'fuse.js'; // Import Fuse.js
+import Fuse from 'fuse.js';
 
 function Header(props) {
     const [searchTerm, setSearchTerm] = useState('');
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
-    };
-
-    const handleSearchSubmit = (event) => {
-        event.preventDefault();
-        props.onSearch(searchTerm);
+        props.onSearch(event.target.value);
     };
 
     return (
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
             <h1>The Film Club</h1>
-            <form onSubmit={handleSearchSubmit}>
-                <input type="text" value={searchTerm} onChange={handleSearchChange} placeholder="Search..." />
-                <button type="submit">Search</button>
-            </form>
+            <input type="text" value={searchTerm} onChange={handleSearchChange} placeholder="Search..." />
         </div>
     );
 }
@@ -30,7 +23,7 @@ export function PodcastGrid(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [selectedSeason, setSelectedSeason] = useState(1);
     const [sortOption, setSortOption] = useState('');
-    const [originalData, setOriginalData] = useState([]); // Store the original data
+    const [originalData, setOriginalData] = useState([]);
 
     useEffect(() => {
         setIsLoading(true);
@@ -57,7 +50,7 @@ export function PodcastGrid(props) {
                 Promise.all(promises)
                     .then(data => {
                         setRowData(data);
-                        setOriginalData(data); // Store the original data
+                        setOriginalData(data);
                         setIsLoading(false);
                     })
                     .catch(error => {
@@ -107,10 +100,6 @@ export function PodcastGrid(props) {
         });
     };
 
-    const handleGoBack = () => {
-        console.log('Going back...');
-    };
-
     const handleSeasonChange = (event) => {
         setSelectedSeason(event.target.value);
     };
@@ -136,9 +125,6 @@ export function PodcastGrid(props) {
                 <p>Loading...</p>
             ) : (
                 <>
-                    <div style={{ position: 'absolute', top: '10px', right: '10px' }}>
-                        <button onClick={handleGoBack}>Back</button>
-                    </div>
                     <Header onSearch={handleSearch} />
                     <select onChange={handleSortOptionChange}>
                         <option value="">Sort by:</option>
@@ -193,6 +179,14 @@ export function PodcastGrid(props) {
         </div>
     );
 }
+
+
+
+
+
+
+
+
 
 
 
