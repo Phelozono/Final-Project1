@@ -1,0 +1,26 @@
+/* PodcastGrid.css */
+
+.podcast-grid-container {
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    color: white;
+    position: relative;
+}
+
+.podcast-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.podcast-card {
+    margin-bottom: 20px;
+    background-color: black;
+    color: white;
+    padding: 10px;
+    flex: 0 0 30%;
+    margin: 10px;
+}
+
+/* Add more styles as needed */

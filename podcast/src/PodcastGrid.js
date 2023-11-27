@@ -1,39 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import Fuse from 'fuse.js';
+import Header from './Header';
+import './PodcastGrid.css';
 
-function Header(props) {
-    const [searchTerm, setSearchTerm] = useState('');
-
-    const handleSearchChange = (event) => {
-        setSearchTerm(event.target.value);
-        props.onSearch(event.target.value);
-    };
-
-    return (
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-            <h1>The Film Club</h1>
-            <input type="text" value={searchTerm} onChange={handleSearchChange} placeholder="Search..." />
-        </div>
-    );
-}
-
-export function PodcastGrid(props) {
+function PodcastGrid(props) {
     const [rowData, setRowData] = useState([]);
     const [favorites, setFavorites] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [selectedSeason, setSelectedSeason] = useState(1);
     const [sortOption, setSortOption] = useState('');
     const [originalData, setOriginalData] = useState([]);
+    const [selectedEpisodeId, setSelectedEpisodeId] = useState(null); // New state for selected episode
 
     useEffect(() => {
         setIsLoading(true);
+
+        // Fetch shows data
         fetch('https://podcast-api.netlify.app/shows')
             .then(response => response.json())
             .then(shows => {
                 const promises = shows.map(show => {
+                    // Fetch episode data for each show
                     return fetch(`https://podcast-api.netlify.app/id/${show.id}`)
                         .then(response => response.json())
                         .then(showData => {
+                            // Process and structure the episode data as needed
                             const id = showData.id;
                             const title = showData.title;
                             const description = showData.description;
@@ -47,6 +38,7 @@ export function PodcastGrid(props) {
                         });
                 });
 
+                // Resolve promises for each show
                 Promise.all(promises)
                     .then(data => {
                         setRowData(data);
@@ -54,12 +46,12 @@ export function PodcastGrid(props) {
                         setIsLoading(false);
                     })
                     .catch(error => {
-                        console.error('Error:', error);
+                        console.error('Error fetching episode data:', error);
                         setIsLoading(false);
                     });
             })
             .catch(error => {
-                console.error('Error:', error);
+                console.error('Error fetching shows data:', error);
                 setIsLoading(false);
             });
     }, []);
@@ -119,24 +111,37 @@ export function PodcastGrid(props) {
         setRowData(filteredData);
     };
 
+    const loadEpisodeData = (episodeId) => {
+        setSelectedEpisodeId(episodeId);
+    };
+
     return (
-        <div style={{ height: props.height, width: props.width, backgroundColor: 'black', color: 'white', position: 'relative' }}>
+        <div className="podcast-grid-container">
             {isLoading ? (
                 <p>Loading...</p>
+            ) : selectedEpisodeId ? (
+                <div>
+                    {/* Display selected episode details directly within PodcastGrid */}
+                    <h2>{rowData.find(row => row.id === selectedEpisodeId).title}</h2>
+                    {/* Add other episode details as needed */}
+                    <button onClick={() => setSelectedEpisodeId(null)}>Back to Podcasts</button>
+                </div>
             ) : (
                 <>
-                    <Header onSearch={handleSearch} />
-                    <select onChange={handleSortOptionChange}>
-                        <option value="">Sort by:</option>
-                        <option value="az">Title A-Z</option>
-                        <option value="za">Title Z-A</option>
-                        <option value="dateAsc">Date Ascending</option>
-                        <option value="dateDesc">Date Descending</option>
-                    </select>
-                    <button onClick={sortData}>Sort</button>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around' }}>
+                    <div style={{ padding: '10px', backgroundColor: '#2c3e50' }}>
+                        <Header onSearch={handleSearch} />
+                        <select onChange={handleSortOptionChange}>
+                            <option value="">Sort by:</option>
+                            <option value="az">Title A-Z</option>
+                            <option value="za">Title Z-A</option>
+                            <option value="dateAsc">Date Ascending</option>
+                            <option value="dateDesc">Date Descending</option>
+                        </select>
+                        <button onClick={sortData}>Sort</button>
+                    </div>
+                    <div className="podcast-grid">
                         {rowData.map((row, index) => (
-                            <div key={index} style={{ marginBottom: '20px', backgroundColor: 'black', color: 'white', padding: '10px', flex: '0 0 30%', margin: '10px' }}>
+                            <div key={index} className="podcast-card">
                                 <img src={row.image} alt={row.title} style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'cover' }} />
                                 <h2>{row.title}</h2>
                                 <p>{row.description}</p>
@@ -149,28 +154,36 @@ export function PodcastGrid(props) {
                                     ))}
                                 </select>
                                 <p>Last Updated: {row.updated}</p>
-                                <button>Play</button>
+                                <button onClick={() => loadEpisodeData(row.id)}>Load Episode</button>
                                 <div style={{ marginTop: '10px' }}>
                                     <button style={{ marginRight: '10px' }} onClick={() => handleFavorite(row.id)}>
                                         {favorites[row.id]?.isFavorite ? `❤️ Added to favorites on ${favorites[row.id].dateAdded}` : '❤️'}
                                     </button>
                                 </div>
                                 <div>
-                                    <h3>Episodes:</h3>
+                                    
                                     <ul>
-                                        {row.episodes.map((episode, index) => (
-                                            <li key={index}>{episode.title}</li>
+                                        {row.episodes.map((episode, episodeIndex) => (
+                                            <li key={episodeIndex}>
+                                                <h4>{episode.title}</h4>
+                                                <p>{episode.description}</p>
+                                                {/* Add other episode details as needed */}
+                                                <button onClick={() => loadEpisodeData(episode.id)}>Episode</button>
+                                            </li>
                                         ))}
                                     </ul>
                                 </div>
                                 <div>
-                                    <h3>Genres:</h3>
-                                    {row.genres.split(', ').map((genre, index) => (
-                                        <span key={index} onClick={() => handleGenreClick(genre)} style={{ cursor: 'pointer' }}>
-                                            {genre}
-                                        </span>
-                                    ))}
-                                </div>
+                                <h3>Genres:</h3>
+                                <ul>
+                                 {row.genres.split(', ').map((genre, index) => (
+                           <li key={index} onClick={() => handleGenreClick(genre)} style={{ cursor: 'pointer' }}>
+                            {genre}
+            </li>
+        ))}
+    </ul>
+</div>
+
                             </div>
                         ))}
                     </div>
@@ -179,6 +192,15 @@ export function PodcastGrid(props) {
         </div>
     );
 }
+
+export default PodcastGrid;
+
+
+
+
+
+
+
 
 
 
