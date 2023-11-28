@@ -1,4 +1,3 @@
-// Header.js
 import React, { useState } from 'react';
 
 function Header(props) {
