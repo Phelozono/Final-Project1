@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import Fuse from 'fuse.js';
 import Header from './Header';
 import './PodcastGrid.css';
+import supabase from './supabaseClient'
 
 function PodcastGrid() {
   const [rowData, setRowData] = useState([]);
   const [favorites, setFavorites] = useState({});
+  const [favoriteEpisodes, setFavoriteEpisodes] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [selectedSeason, setSelectedSeason] = useState(null);
   const [sortOption, setSortOption] = useState('');
@@ -44,6 +46,19 @@ function PodcastGrid() {
         .catch(error => console.error('Error:', error));
     }
   }, [selectedEpisodeId]);
+
+  const handleFavoriteEpisode = (episode) => {
+    const isFavorite = !favoriteEpisodes[episode.id]?.isFavorite;
+    const dateAdded = new Date().toLocaleString();
+    const updatedFavorites = { ...favoriteEpisodes, [episode.id]: { ...episode, isFavorite, dateAdded } };
+    setFavoriteEpisodes(updatedFavorites);
+  };
+
+  const handleRemoveFavoriteEpisode = (episodeId) => {
+    const updatedFavorites = { ...favoriteEpisodes };
+    delete updatedFavorites[episodeId];
+    setFavoriteEpisodes(updatedFavorites);
+  };
 
   const sortData = () => {
     let sortedData;
@@ -109,15 +124,6 @@ function PodcastGrid() {
     const isFavorite = !favorites[id]?.isFavorite;
     const dateAdded = new Date().toLocaleString();
     const updatedFavorites = { ...favorites, [id]: { isFavorite, dateAdded } };
-    setFavorites(updatedFavorites);
-    const favoriteShowsList = Object.keys(updatedFavorites).filter(key => updatedFavorites[key].isFavorite);
-    setFavoriteShows(favoriteShowsList);
-  };
-
-  const handleFavoriteEpisode = (episodeId) => {
-    const isFavorite = !favorites[episodeId]?.isFavorite;
-    const dateAdded = new Date().toLocaleString();
-    const updatedFavorites = { ...favorites, [episodeId]: { isFavorite, dateAdded } };
     setFavorites(updatedFavorites);
     const favoriteShowsList = Object.keys(updatedFavorites).filter(key => updatedFavorites[key].isFavorite);
     setFavoriteShows(favoriteShowsList);
@@ -206,7 +212,7 @@ function PodcastGrid() {
               <p>Seasons: {row.seasons.length}</p>
               <p>Last Updated: {row.updated}</p>
               <div style={{ marginTop: '10px' }}>
-              <button style={{ marginRight: '10px', color: favorites[row.id]?.isFavorite ? 'red' : 'black' }} onClick={() => handleFavorite(row.id)}>
+                <button style={{ marginRight: '10px', color: favorites[row.id]?.isFavorite ? 'red' : 'black' }} onClick={() => handleFavorite(row.id)}>
                   ❤️
                 </button>
               </div>
@@ -230,6 +236,12 @@ function PodcastGrid() {
                           <source src={episode.file} type="audio/mpg" />
                           Your browser does not support the audio element.
                         </audio>
+                        <button onClick={() => handleFavoriteEpisode(episode)}>
+                          {favoriteEpisodes[episode.id]?.isFavorite ? '💔' : '❤️'}
+                        </button>
+                        <button onClick={() => handleRemoveFavoriteEpisode(episode.id)}>
+                          Remove from favorites
+                        </button>
                       </li>
                     ))}
                   </ul>
@@ -254,5 +266,3 @@ function PodcastGrid() {
 }
 
 export default PodcastGrid;
-
-
