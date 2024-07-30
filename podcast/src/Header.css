@@ -1,0 +1,81 @@
+/* Header.css */
+.header {
+    background-color: #282c34;
+    padding: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .header-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .header h1 {
+    color: #61dafb;
+    font-size: 2rem;
+    margin: 0;
+  }
+  
+  .search-container {
+    display: flex;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .search-container input {
+    padding: 8px;
+    border: none;
+    border-radius: 4px 0 0 4px;
+    outline: none;
+    font-size: 0.9rem;
+  }
+  
+  .search-container button {
+    padding: 8px 10px;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    background-color: #61dafb;
+    color: white;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .search-container button:hover {
+    background-color: #21a1f1;
+  }
+  
+  .sort-container {
+    display: flex;
+    gap: 4px;
+    margin-top: 5px;
+  }
+  
+  .sort-container button {
+    padding: 8px 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #61dafb;
+    color: white;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .sort-container button:hover {
+    background-color: #21a1f1;
+  }
+
+  .podcast-image {
+    width: 150px;  /* Adjust the width as needed */
+    height: auto;  /* Maintains aspect ratio */
+    max-height: 150px;  /* Adjust the height as needed */
+    object-fit: cover;  /* Ensures the image covers the specified dimensions */
+  }
+  
+  
+  

@@ -1,62 +1,101 @@
 /* PodcastGrid.css */
 
+/* Container for the entire grid */
 .podcast-grid-container {
-    height: 100%;
-    width: 100%;
-    background-color: black;
-    color: white;
-    position: relative;
-    padding: 20px; /* Add padding for better spacing */
-  }
-  
-  .header-container {
-    margin-bottom: 20px;
-  }
-  
-  .sort-container,
-  .favorite-container {
-    margin-left: 10px;
-  }
-  
-  .selected-episode-container {
-    margin-top: 20px;
-  }
-  
-  .podcast-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-  }
-  
-  .podcast-card {
-    background-color: black;
-    color: white;
-    padding: 20px;
-    flex: 0 0 calc(30% - 20px); /* Adjusted flex basis to include padding */
-    margin: 10px;
-    box-sizing: border-box; /* Include padding in the total width */
-  }
-  
-  .favorite-button-container {
-    margin-top: 10px;
-  }
-  
-  .episode-list-container,
-  .genre-list-container {
-    margin-top: 10px;
-  }
-  
-  .episode-list-container ul,
-  .genre-list-container ul {
-    padding: 0;
-    list-style: none;
-  }
-  
-  .episode-list-container li,
-  .genre-list-container li {
-    margin-bottom: 10px;
-    cursor: pointer;
-  }
-  
-  /* Add more styles as needed */
-  
+  height: 100%;
+  width: 100%;
+  background-color: black;
+  color: white;
+  position: relative;
+  padding: 10px; /* Add padding for better spacing */
+}
+
+/* Header container */
+.header-container {
+  margin-bottom: 10px;
+}
+
+/* Sorting and favorite containers */
+.sort-container,
+.favorite-container {
+  margin-left: 10px;
+}
+
+/* Selected episode container */
+.selected-episode-container {
+  margin-top: 10px;
+}
+
+/* Podcast grid */
+.podcast-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 10px; /* Space between items */
+}
+
+/* Individual podcast card */
+.podcast-card {
+  background-color: #1e1e1e; /* Slightly darker background for the card */
+  color: white;
+  padding: 10px;
+  flex: 0 0 calc(30% - 20px); /* Adjusted flex basis to include padding */
+  margin: 10px;
+  box-sizing: border-box; /* Include padding in the total width */
+  border: 2px solid #ddd; /* Border around each card */
+  border-radius: 4px; /* Rounded corners for the border */
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  text-align: center; /* Center text inside the card */
+}
+
+/* Podcast card image */
+.podcast-image {
+  max-width: 100%;
+  height: auto; /* Maintain aspect ratio */
+  object-fit: cover; /* Ensure images cover the container without distortion */
+  border-radius: 4px; /* Rounded corners for the image */
+}
+
+/* Carousel styles */
+.carousel {
+  margin-bottom: 10px; /* Space below the carousel */
+}
+
+.carousel-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-image {
+  max-width: 100%;
+  height: auto; /* Maintain aspect ratio */
+  object-fit: cover; /* Ensure images cover the container without distortion */
+  border-radius: 4px; /* Rounded corners for the image */
+}
+
+/* Info section within each card */
+.podcast-info {
+  margin-top: 10px;
+}
+
+/* List styles */
+.episode-list-container ul,
+.genre-list-container ul {
+  padding: 0;
+  list-style: none;
+}
+
+.episode-list-container li,
+.genre-list-container li {
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+

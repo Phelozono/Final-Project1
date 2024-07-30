@@ -1,21 +1,41 @@
+// Header.js
 import React, { useState } from 'react';
+import './Header.css';
 
-function Header(props) {
-    const [searchTerm, setSearchTerm] = useState('');
+const Header = ({ onSearch, onSort }) => {
+  const [searchTerm, setSearchTerm] = useState('');
 
-    const handleSearchChange = (event) => {
-        setSearchTerm(event.target.value);
-        props.onSearch(event.target.value);
-    };
+  const handleInputChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
 
-    return (
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', backgroundColor: '#3498db' }}>
-            <h1>The Film Club</h1>
-            <input type="text" value={searchTerm} onChange={handleSearchChange} placeholder="Search..." />
+  const handleSearch = () => {
+    onSearch(searchTerm);
+  };
+
+  return (
+    <header className="header">
+      <div className="header-content">
+        <h1>The FILM CLUB</h1>
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Search podcasts..."
+            value={searchTerm}
+            onChange={handleInputChange}
+          />
+          <button onClick={handleSearch}>Search</button>
         </div>
-    );
-    
-    
-}
+        <div className="sort-container">
+          <button onClick={() => onSort('az')}>Sort A-Z</button>
+          <button onClick={() => onSort('za')}>Sort Z-A</button>
+          <button onClick={() => onSort('dateAsc')}>Sort by Date Asc</button>
+          <button onClick={() => onSort('dateDesc')}>Sort by Date Desc</button>
+        </div>
+      </div>
+    </header>
+  );
+};
 
 export default Header;
+
